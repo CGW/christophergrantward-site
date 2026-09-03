@@ -30,6 +30,19 @@ DROP_JS_SUBSTR = (
 
 TRACKING_ATTR_HINTS = ("gtag(", "ga(", "fbq(")
 
+SAFE_RE = re.compile(r'[^A-Za-z0-9._-]+')
+
+def sanitize_segment(part):
+    part = urllib.parse.unquote(part)
+    part = part.replace("+", " ")
+    stem, dot, ext = part.rpartition(".")
+    if dot and len(ext) <= 5 and ext.isalnum():
+        stem = SAFE_RE.sub("-", stem).strip("-") or "file"
+        part = f"{stem}.{ext.lower()}"
+    else:
+        part = SAFE_RE.sub("-", part).strip("-") or "file"
+    return part
+
 def local_path_for(url):
     p = urllib.parse.urlparse(url)
     host = p.netloc
@@ -39,6 +52,7 @@ def local_path_for(url):
     parts = path.split("/")
     safe_parts = []
     for part in parts:
+        part = sanitize_segment(part)
         if len(part.encode()) > 120:
             h = hashlib.sha1(part.encode()).hexdigest()[:16]
             ext = ""
