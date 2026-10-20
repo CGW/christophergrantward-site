@@ -1,0 +1,19 @@
+/* Site Freedom fixes — undo breakages caused by removing the builder's JavaScript.
+   Safe to edit. See references/troubleshooting.md for what each rule is for. */
+
+/* Scroll-reveal animations that never fire without platform JS */
+.preSlide, .preFade, .preScale, .preFlex, .preClip,
+[data-animation-role], [data-aos], .wow, .reveal, .fade-in, .animate-on-scroll {
+  opacity: 1 !important; transform: none !important; clip-path: none !important;
+  visibility: visible !important; animation: none !important;
+}
+/* Squarespace 7.1 blog lists (side-by-side, alternating, grid, single column)
+   start every post at opacity 0 until JS marks it loaded */
+.blog-list .blog-item, .blog-list article, .blog-basic-grid--container article,
+.cdk-section .content-wrapper { opacity: 1 !important; transform: none !important; }
+/* Squarespace 7.1 blog lists start every post at opacity 0 until JS marks it loaded */
+.blog-list .blog-item, .blog-list article { opacity: 1 !important; transform: none !important; }
+/* Lazy images that wait for a JS "loaded" class */
+img[data-src], img[data-image], .sqs-image img, .image-block-wrapper img { opacity: 1 !important; }
+/* Wix pre-render placeholders */
+[data-hook="wix-image"] img, wow-image img { opacity: 1 !important; }
